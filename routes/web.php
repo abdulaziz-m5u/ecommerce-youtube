@@ -24,4 +24,10 @@ Route::resource('/cart', \App\Http\Controllers\CartController::class);
 
 Route::get('/order/checkout', [\App\Http\Controllers\OrderController::class, 'process'])->name('checkout.process');
 
-Route::get('/admin', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+Route::group(['middleware' => ['auth', 'isAdmin'],'prefix' => 'admin'], function() {
+    Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
