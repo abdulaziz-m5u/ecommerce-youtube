@@ -49,19 +49,33 @@
         <div class="header__cart__price">item: <span>$150.00</span></div>
       </div>
       <div class="humberger__menu__widget">
-        <div class="header__top__right__language">
-          <div class="header__top__right__auth">
-            <a href="#"><i class="fa fa-user"></i> Login</a>
+          @guest
+            <div class="header__top__right__language">
+              <div class="header__top__right__auth">
+                <a href="{{ route('login') }}"><i class="fa fa-user"></i> Login</a>
+              </div>
+            </div>
+            <div class="header__top__right__auth" style="margin-left: 20px">
+              <a href="{{ route('register') }}"><i class="fa fa-user"></i> Register</a>
+            </div>
+          @else 
+          <div class="header__top__right__language">
+            <div class="header__top__right__auth">
+              <a href=""><i class="fa fa-user"></i> {{ auth()->user()->name }}</a>
+            </div>
+            <span class="arrow_carrot-down"></span>
+            <ul>
+              <li><a href="#">Profile</a></li>
+            </ul>
           </div>
-          <span class="arrow_carrot-down"></span>
-          <ul>
-            <li><a href="#">Spanis</a></li>
-            <li><a href="#">English</a></li>
-          </ul>
-        </div>
-        <div class="header__top__right__auth" style="margin-left: 20px">
-          <a href="#"><i class="fa fa-user"></i> Register</a>
-        </div>
+          <div class="header__top__right__auth" style="margin-left: 20px">
+            <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-user"></i> Logout</a>
+            <form action="{{ route('logout') }}" id="logout-form" method="post">
+              @csrf 
+
+            </form>
+          </div>
+          @endguest
       </div>
       <nav class="humberger__menu__nav mobile-menu">
         <ul>
@@ -109,23 +123,40 @@
               </div>
             </div>
             <div class="col-lg-6 col-md-6">
-              <div class="header__top__right">
+                @guest
+                  <div class="header__top__right">
+                    <div
+                      class="header__top__right__language header__top__right__auth"
+                    >
+                      <a class="d-inline" href="{{ route('login') }}"
+                        ><i class="fa fa-user"></i> Login</a
+                      >
+                    </div>
+                    <div class="header__top__right__auth">
+                      <a href="{{ route('login') }}"><i class="fa fa-user"></i> Register</a>
+                    </div>
+                </div>
+                @else 
+                <div class="header__top__right">
                 <div
                   class="header__top__right__language header__top__right__auth"
                 >
                   <a class="d-inline" href="#"
-                    ><i class="fa fa-user"></i> Login</a
+                    ><i class="fa fa-user"></i> {{ auth()->user()->name }}</a
                   >
                   <span class="arrow_carrot-down"></span>
                   <ul>
-                    <li><a href="#">Spanis</a></li>
-                    <li><a href="#">English</a></li>
+                    <li><a href="#">Profile</a></li>
                   </ul>
                 </div>
                 <div class="header__top__right__auth">
-                  <a href="#"><i class="fa fa-user"></i> Register</a>
+                  <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit()"><i class="fa fa-user"></i> Logout</a>
+                  <form action="{{ route('logout') }}" id="logout-form" method="post">
+                    @csrf                   
+                  </form>
                 </div>
               </div>
+                @endguest
             </div>
           </div>
         </div>
