@@ -24,8 +24,11 @@ Route::resource('/cart', \App\Http\Controllers\CartController::class);
 
 Route::get('/order/checkout', [\App\Http\Controllers\OrderController::class, 'process'])->name('checkout.process');
 
-Route::group(['middleware' => ['auth', 'isAdmin'],'prefix' => 'admin'], function() {
+Route::group(['middleware' => ['auth', 'isAdmin'],'prefix' => 'admin', 'as' => 'admin.'], function() {
     Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+   
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+    Route::post('categories/images', [\App\Http\Controllers\Admin\CategoryController::class,'storeImage'])->name('categories.storeImage');
 });
 
 Auth::routes();
