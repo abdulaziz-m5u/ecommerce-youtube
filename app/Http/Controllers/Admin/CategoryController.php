@@ -78,6 +78,13 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
+        if($request->input('photo', false)){
+            if(!$category->photo || $request->input('photo') !== $category->photo->file_name){
+                isset($category->photo) ? $category->photo->delete() : null;
+                $category->addMedia(storage_path('tmp/uploads/') . $request->input('photo'))->toMediaCollection('photo');
+            }
+        }
+
         return redirect()->route('admin.categories.index')->with([
             'message' => 'Success Updated !',
             'type' => 'info'

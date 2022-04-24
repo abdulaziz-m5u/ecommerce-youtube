@@ -90,17 +90,30 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                
+
+                @if(session()->has('message'))
+                    <div class="alert alert-{{ session()->get('type') }} alert-dismissible fade show">
+                        {{ session()->get('message') }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+
                 @if($errors->any())
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger alert-dismissible fade show">
                         <ul>
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
+
+                        <button class="close" type="button" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 @endif
-
+            
                    @yield('content')
 
 

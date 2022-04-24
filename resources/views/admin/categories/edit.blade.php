@@ -33,7 +33,7 @@
                         <select name="category_id" class="form-control">
                             <option value="">-- Default --</option>
                             @foreach($categories as $id => $categoryName)
-                                <option {{ isset($category->parent->id) ?? $category->parent->id  === $id  ? 'selected' : null }} value="{{ $id }}">{{ $categoryName }}</option>
+                                <option {{ $category->category_id  === $id  ? 'selected' : null }} value="{{ $id }}">{{ $categoryName }}</option>
                             @endforeach
                         </select>
                     </div>
