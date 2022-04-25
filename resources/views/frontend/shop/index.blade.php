@@ -29,16 +29,18 @@
               <div class="sidebar__item">
                 <h4>Categories</h4>
                 <ul>
-                  <li><a href="#">Fresh Meat</a></li>
-                  <li><a href="#">Vegetables</a></li>
-                  <li><a href="#">Fruit & Nut Gifts</a></li>
-                  <li><a href="#">Fresh Berries</a></li>
-                  <li><a href="#">Ocean Foods</a></li>
-                  <li><a href="#">Butter & Eggs</a></li>
-                  <li><a href="#">Fastfood</a></li>
-                  <li><a href="#">Fresh Onion</a></li>
-                  <li><a href="#">Papayaya & Crisps</a></li>
-                  <li><a href="#">Oatmeal</a></li>
+                  @foreach($menu_categories as $menu_category)
+                    <li>
+                      <a href="{{ route('shop.index', $menu_category->slug) }}">{{ $menu_category->name }}</a>
+                        <ul>
+                          @foreach($menu_category->children as $child)
+                            <li class="px-2">
+                              <a href="{{ route('shop.index', $child->slug) }}" style="color: #b4b4b4;">{{ $child->name }}</a>
+                            </li>
+                          @endforeach
+                        </ul>
+                    </li>
+                  @endforeach
                 </ul>
               </div>
               <div class="sidebar__item">
@@ -103,9 +105,6 @@
                     <ul class="product__item__pic__hover">
                       <li>
                         <a href="#"><i class="fa fa-heart"></i></a>
-                      </li>
-                      <li>
-                        <a href="#"><i class="fa fa-retweet"></i></a>
                       </li>
                       <li>
                         <a href="#"><i class="fa fa-shopping-cart"></i></a>
