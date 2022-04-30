@@ -34,6 +34,10 @@ Route::group(['middleware' => ['auth', 'isAdmin'],'prefix' => 'admin', 'as' => '
 
     // tags
     Route::resource('tags', \App\Http\Controllers\Admin\TagController::class);
+
+    // products
+    Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
+    Route::post('products/images', [\App\Http\Controllers\Admin\ProductController::class,'storeImage'])->name('products.storeImage');
 });
 
 Auth::routes();
