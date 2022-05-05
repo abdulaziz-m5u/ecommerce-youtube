@@ -13,12 +13,20 @@
                 <form action="{{ route('admin.products.store') }}" method="post">
                     @csrf 
                     <div class="form-group">
-                    <label for="category_id">Category</label>
-                    <select class="form-control" name="category_id" id="">
-                        @foreach($categories as $id => $categoryName)
-                            <option value="{{ $id }}">{{ $categoryName }}</option>
-                        @endforeach
-                    </select>   
+                        <label for="category_id">Category</label>
+                        <select class="form-control" name="category_id" id="">
+                            @foreach($categories as $id => $categoryName)
+                                <option value="{{ $id }}">{{ $categoryName }}</option>
+                            @endforeach
+                        </select>   
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Tag</label>
+                        <select class="form-control" name="tags[]" multiple id="tags">
+                            @foreach($tags as $id => $tagName)
+                                <option value="{{ $id }}">{{ $tagName }}</option>
+                            @endforeach
+                        </select>   
                     </div>
                     <div class="form-group">
                         <label for="name">Name</label>

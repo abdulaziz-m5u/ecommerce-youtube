@@ -17,6 +17,7 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Category</th>
+                                <th>Tag</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Image</th>
@@ -31,13 +32,20 @@
                                     <td>
                                         <span class="badge badge-success">{{ $product->category->name }}</span>
                                     </td>
+                                    <td>
+                                        @foreach($product->tags as $tag)
+                                            <span class="badge badge-primary"> {{ $tag->name  }}</span>
+                                        @endforeach
+                                    </td>
                                     <td>${{ number_format($product->price, 2) }}</td>
                                     <td>{{ $product->quantity }}</td>
                                     <td>
-                                        @if($product->gallery)
+                                        @if(count($product->gallery)  > 0)
                                             <a href="{{ $product->getMedia('gallery')->first()->getUrl() }}" target="_blank">
                                                 <img src="{{ $product->getMedia('gallery')->first()->getUrl() }}" width="45px" height="45px" alt="">  
                                             </a>
+                                        @else
+                                            <span class="badge badge-warning">no image</span>
                                         @endif
                                     </td>
                                     <td>

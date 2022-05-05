@@ -22,6 +22,14 @@
                     </select>   
                     </div>
                     <div class="form-group">
+                        <label for="tags">Tag</label>
+                        <select class="form-control" name="tags[]" multiple id="tags">
+                            @foreach($tags as $id => $tagName)
+                                <option {{ in_array($id, $product->tags->pluck('id')->toArray()) ? 'selected' : null  }} value="{{ $id }}">{{ $tagName }}</option>
+                            @endforeach
+                        </select>   
+                    </div>
+                    <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" name="name" value="{{ old('name', $product->name) }}" class="form-control">
                     </div>

@@ -18,13 +18,17 @@
                                 <td colspan="6"></td>
                             </tr>
                             <tr>
-                                @foreach($product->getMedia('gallery') as $gallery)
+                                @forelse($product->getMedia('gallery') as $gallery)
                                     <th class="col-lg-3 col-md-4 col-sm-6">
                                         <a href="{{ $gallery->getFullUrl() }}">
                                             <img src="{{ $gallery->getFullUrl() }}" alt="{{ $product->name }}" class="img-fluid">
                                         </a>
                                     </th>
-                                @endforeach
+                                @empty
+                                    <th>
+                                        <span class="badge badge-warning">no image</span>
+                                    </th>
+                                @endforelse
                             </tr>
                             <tr>
                                 <th>Description</th>

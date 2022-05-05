@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ImageUploadingTrait;
 use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
 
 class ProductController extends Controller
 {
@@ -32,8 +32,9 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::pluck('name', 'id');
+        $tags = Tag::pluck('name', 'id');
 
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.create', compact('categories','tags'));
     }
 
     /**
@@ -45,6 +46,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $product = Product::create($request->validated());
+        $product->tags()->attach($request->input('tags', []));
 
         foreach ($request->input('gallery', []) as $file) {
             $product->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('gallery');
@@ -76,8 +78,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::pluck('name', 'id');
+        $tags = Tag::pluck('name', 'id');
 
-        return view('admin.products.edit', compact('product','categories'));
+        return view('admin.products.edit', compact('product','categories','tags'));
     }
 
     /**
@@ -90,6 +93,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request,Product $product)
     {
         $product->update($request->validated());
+        $product->tags()->sync($request->input('tags', []));
 
         if (count($product->gallery) > 0) {
             foreach ($product->gallery as $media) {
