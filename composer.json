@@ -2,16 +2,21 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
         "cviebrock/eloquent-sluggable": "^9.0",
+        "darryldecode/cart": "^4.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
+        "midtrans/midtrans-php": "^2.5",
         "spatie/laravel-medialibrary": "^10.0.0"
     },
     "require-dev": {
@@ -32,7 +37,10 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "app/Helpers/General.php"
+        ]
     },
     "scripts": {
         "post-autoload-dump": [

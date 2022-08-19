@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -13,7 +14,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('frontend.cart.index');
+        $carts = \Cart::getContent();
+
+        return view('frontend.cart.index', compact('carts'));
     }
 
     /**
@@ -32,9 +35,33 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$sessionKey = null)
     {
-        //
+        $product = Product::findOrFail($request->productId);
+
+		$item = [
+			'id' => md5($product->id),
+			'name' => $product->name,
+			'price' => $product->price,
+			'quantity' => isset($request->quantity) ? $request->quantity : 1,
+			'associatedModel' => $product,
+		];
+
+        if ($sessionKey) {
+            \Cart::add($item);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Successfully Added to Cart !',
+            ]);
+        }else {
+            $carts = \Cart::add($item);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Successfully Added to Cart !',
+            ]);
+        }
+        
+		
     }
 
     /**
@@ -43,9 +70,16 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showCart(Request $request)
     {
-        //
+        $carts = \Cart::getContent();
+        $cart_total = \Cart::getTotal();
+
+        return response()->json([
+            'status' => 200,
+            'carts' => $carts,
+            'cart_total' => $cart_total,
+        ]);
     }
 
     /**
@@ -66,9 +100,24 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $cart_id)
     {
-        //
+        $cartUpdate = \Cart::update($cart_id,[
+            'quantity' => [
+                'relative' => false,
+                'value' => $request->quantity,
+            ],
+        ]);
+
+        $carts = \Cart::getContent();
+        $cart_total = \Cart::getTotal();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully updated Cart !',
+            'carts' => $carts,
+            'cart_total' => $cart_total,
+        ]);
     }
 
     /**
@@ -77,8 +126,15 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($cart_id)
     {
-        //
+        \Cart::remove($cart_id);
+        $cart_total = \Cart::getTotal();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully deleted Cart !',
+            'cart_total' => $cart_total,
+        ]);
     }
 }

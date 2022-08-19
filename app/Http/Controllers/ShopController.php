@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index(Request $request,$slug = null)
+    public function index()
     {
-        switch ($request->sortingBy) {
+        $cartTotal = \Cart::getTotal();
+        $cartCount = \Cart::getContent()->count();
+
+        return view('frontend.shop.index', compact('cartTotal', 'cartCount'));
+    }
+
+    public function getProducts(Request $request,$slug = null){
+
+        $sorting = $request->sortingBy;
+
+        switch ($sorting) {
             case 'popularity':
                 $sortField = 'id';
                 $sortType = 'desc';
@@ -30,10 +40,9 @@ class ShopController extends Controller
 
         $products = Product::with('category');
 
-        if ($slug == '') {
-            $products = $products;
-        } else {
-            $category = Category::whereSlug($slug)->first();
+        if(!is_null($slug)){
+            $category = Category::whereSlug($slug)->firstOrFail();
+            
             
             if (is_null($category->category_id)) {
         
@@ -53,14 +62,19 @@ class ShopController extends Controller
             }
         }
 
-        $products = $products->orderBy($sortField, $sortType)->paginate(6);
-        
-        return view('frontend.shop.index', compact('products','slug'));
+        $products = $products->orderBy($sortField, $sortType)->get();
+
+        return response()->json([
+            'message' => 'Success',
+            'products' => $products
+        ]);
+
     }
 
     public function tag(Request $request, $slug)
     {
-        switch ($request->sortingBy) {
+        $sorting = $request->sortingBy;
+        switch ($sorting) {
             case 'popularity':
                 $sortField = 'id';
                 $sortType = 'desc';
