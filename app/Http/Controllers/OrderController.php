@@ -13,10 +13,9 @@ use Midtrans\Snap;
 
 class OrderController extends Controller
 {
-    public function process(){
-		$cartTotal = $this->cartTotal;
-
-        return view('frontend.order.checkout', compact('cartTotal'));
+	public function process()
+	{
+        return view('frontend.order.checkout');
     }
 
     private function getSelectedShipping($destination, $totalWeight, $shippingService)
